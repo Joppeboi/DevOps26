@@ -71,8 +71,10 @@ def get_item(item_id: int) -> Item:
 
 @app.delete("/api/items/{item_id}", status_code=204, response_model=None)
 def delete_item(item_id: int) -> None:
+    global _total_characters
     for i, item in enumerate(_items):
         if item.id == item_id:
             del _items[i]
+            _total_characters -= len(item.text)
             return
     raise HTTPException(status_code=404, detail="Item not found")
